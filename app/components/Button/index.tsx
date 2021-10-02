@@ -1,34 +1,36 @@
 import React from "react";
-import { StyleSheet, Text, Pressable, PressableProps } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Pressable,
+  PressableProps,
+  StyleProp,
+  ViewStyle,
+  TouchableOpacityProps,
+} from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-interface ButtonProps extends PressableProps {
+interface ButtonProps extends TouchableOpacityProps {
   children: React.ReactNode;
   disabled?: boolean;
+  customStyle?: StyleProp<ViewStyle>;
+  onPress: () => void;
 }
 
-const Button = ({
-  children,
-  disabled,
-  onPress,
-  ...pressableProps
-}: ButtonProps) => {
+const Button = ({ children, customStyle, disabled, onPress }: ButtonProps) => {
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={!disabled ? onPress : () => null}
-      style={({ pressed }) => [
-        {
-          backgroundColor: pressed ? "#a0d37c" : "#5FBA20",
-        },
+      style={[
         styles.appButtonContainer,
+        customStyle,
         disabled && {
           backgroundColor: "rgba(143, 155, 179, 0.24)",
-          color: "rgba(143, 155, 179, 0.48);",
         },
       ]}
-      {...pressableProps}
     >
       <Text style={styles.appButtonText}>{children}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
@@ -36,6 +38,7 @@ export default Button;
 
 const styles = StyleSheet.create({
   appButtonContainer: {
+    backgroundColor: "#5FBA20",
     width: "100%",
     borderRadius: 10,
     paddingVertical: 20,

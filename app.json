@@ -1,0 +1,12 @@
+{
+  "name": "HoldingsTest",
+  "displayName": "HoldingsTest",
+  "expo": {
+    "name": "HoldingsTest",
+    "slug": "HoldingsTest",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

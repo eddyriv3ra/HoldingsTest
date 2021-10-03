@@ -11,9 +11,16 @@ export const storeSessionKey = async (sessionSecret: string) => {
 };
 
 export const getSessionKey = async () => {
-  console.log("eeee");
   try {
     return await SecureStore.getItemAsync(key);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const removeSessionKey = async () => {
+  try {
+    await SecureStore.deleteItemAsync(key);
   } catch (error) {
     console.log(error);
   }

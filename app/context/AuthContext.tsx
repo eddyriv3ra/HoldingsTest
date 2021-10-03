@@ -1,6 +1,6 @@
-import React, { createContext, useState, useEffect } from "react";
-import { monitorSecretKey } from "../api";
-import { getSessionKey } from "../auth/storage";
+import React, { createContext, useState } from "react";
+import AppLoading from "expo-app-loading";
+import { getUserAsync } from "../utils";
 
 interface IAuthContextProvider {
   children: React.ReactNode;
@@ -19,24 +19,22 @@ export const AuthContext = createContext<Partial<IThemeContext>>(defaultState);
 
 const AuthContextProvider = ({ children }: IAuthContextProvider) => {
   const [user, setUser] = useState(undefined);
+  const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    const getUserAsync = async () => {
-      try {
-        const sessionKey = await getSessionKey();
-        console.log({ sessionKey });
-        if (sessionKey) {
-          const response = await monitorSecretKey(sessionKey);
-          if (response?.session_secret) {
-            setUser(response);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUserAsync();
-  }, []);
+  const refetchUser = async () => {
+    const user = await getUserAsync();
+    if (user) return setUser(user);
+  };
+
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={refetchUser}
+        onFinish={() => setIsReady(true)}
+        onError={console.warn}
+      />
+    );
+  }
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

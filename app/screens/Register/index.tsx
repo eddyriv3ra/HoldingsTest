@@ -9,6 +9,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ActivityIndicator from "../../components/ActivityIndicator";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../../navigation/AuthNavigator";
+import { registerApi } from "../../api";
+import { storeSessionKey } from "../../auth/storage";
 
 type RegisterScreenPropNavigation = NativeStackNavigationProp<
   AuthStackParamList,
@@ -51,21 +53,11 @@ const Register = ({ navigation }: IRegister) => {
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
     try {
-      const response = await fetch("https://dev-api.aao.holdings/access/join", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email_address: values.email.value,
-          platform: Platform.OS === "android" ? "2" : "3",
-        }),
-      });
+      setLoading(true);
+      const response = await registerApi(values.email.value);
+      storeSessionKey(response!.session_key);
       setLoading(false);
-      response.json();
       return navigation.navigate("EMailSent");
     } catch (error) {
       setLoading(false);

@@ -11,6 +11,7 @@
     "@react-navigation/native": "^6.0.4",
     "@react-navigation/native-stack": "^6.2.2",
     "expo": "~41.0.1",
+    "expo-secure-store": "~10.1.0",
     "expo-splash-screen": "~0.10.2",
     "expo-updates": "~0.5.4",
     "lottie-ios": "3.2.3",
